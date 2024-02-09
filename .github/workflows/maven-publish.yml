@@ -4,8 +4,12 @@
 name: Maven Package
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version x.y.z'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -24,6 +28,8 @@ jobs:
         distribution: 'temurin'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
+        cache: 'maven'
+        # cache-dependency-path: 'pom.xml'
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
